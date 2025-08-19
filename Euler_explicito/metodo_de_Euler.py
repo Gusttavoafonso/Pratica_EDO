@@ -6,6 +6,7 @@ def euler_explicit(f: Callable[[float, np.ndarray], np.ndarray],
                    y0: Iterable[float] | float,
                    h: float,
                    n_steps: int) -> Tuple[np.ndarray, np.ndarray]:
+    
     y0 = np.atleast_1d(np.array(y0, dtype=float))
     d = y0.size
     t = np.empty(n_steps + 1, dtype=float)
