@@ -12,7 +12,7 @@ t, y = euler_explicit(f, t0=0.0, y0=1.0, h=0.1, n_steps=50)
 # Solução exata
 y_exact = np.array([exp(-2 * ti) for ti in t])
 
-# Erro absoluto
+
 error = np.abs(np.array(y) - y_exact)
 
 print("\n=== Comparação Euler Explícito vs Solução Exata ===")
