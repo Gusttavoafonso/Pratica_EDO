@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from rugerK2_ordem import rk4
 
-# Sistema: y1' = y2, y2' = -omega^2 y1 (oscilador harmônico)
+# Sistema: y1' = y2, y2' = -omega^2 y1 
 omega = 1.0
 
 def f_system(t, y):
@@ -19,7 +19,7 @@ n_steps = 800  # t_final = 16
 t, Y = rk4(f_system, t0=t0, y0=y0, h=h, n_steps=n_steps)
 y1, y2 = Y[:, 0], Y[:, 1]
 
-# Solução exata (opcional)
+# Solução exata
 y1_exact = np.cos(omega * t)
 y2_exact = -np.sin(omega * t)
 
