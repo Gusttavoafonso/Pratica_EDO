@@ -16,7 +16,7 @@ h = 0.02
 n_steps = 800
 t_final = t0 + n_steps * h
 
-# --- 1. Cálculo usando a SUA função euler_explicit ---
+#  Cálculo usando a SUA função euler_explicit ---
 t_custom, Y_custom = euler_explicit(f_system, t0=t0, y0=y0, h=h, n_steps=n_steps)
 y1_custom = Y_custom[:, 0]
 y2_custom = Y_custom[:, 1]
