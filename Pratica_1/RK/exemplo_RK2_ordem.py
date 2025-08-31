@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from rugerK2_ordem import rk4
+from rugerK2_ordem import rk4_2ordem
 
 # Sistema: y1' = y2, y2' = -omega^2 y1 
 omega = 1.0
@@ -8,6 +8,7 @@ omega = 1.0
 def f_system(t, y):
     y1, y2 = y
     return np.array([y2, -(omega**2)*y1])
+    
 
 # Parâmetros
 t0 = 0.0
@@ -16,7 +17,7 @@ h = 0.02
 n_steps = 800  # t_final = 16
 
 # RK4
-t, Y = rk4(f_system, t0=t0, y0=y0, h=h, n_steps=n_steps)
+t, Y = rk4_2ordem(f_system, t0=t0, y0=y0, h=h, n_steps=n_steps)
 y1, y2 = Y[:, 0], Y[:, 1]
 
 # Solução exata

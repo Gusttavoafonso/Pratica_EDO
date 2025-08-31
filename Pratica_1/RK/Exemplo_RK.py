@@ -1,11 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from math import exp
 from rugerk import rk4
 
 
 #Exemplo
-# y' = -2y, y(0) = 1, solução exata y(t) = e^{-2t}
+# y' = -2y, y(0) = 1, 
 def f(t, y):
     return -2*y
 
@@ -16,7 +15,7 @@ n_steps = 50
 
 t, y_rk4 = rk4(f, t0, y0, h, n_steps)
 
-# Solução exata
+# Solução exata  y(t) = e^{-2t}
 y_exact = np.exp(-2*t)
 
 # Print no ponto final

@@ -1,44 +1,57 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from metodo_de_Euler import euler_explicit 
+from metodo_Euler_2_ordem import euler_explicit_2nd
+import sympy as sp
 
+def f(t, y, dy):
+    return np.cos(2*t) - 0.5*dy - y
 
-# --- Definição do sistema ---
-omega = 1.0
-def f_system(t, y):
-    y1, y2 = y
-    return np.array([y2, -(omega**2) * y1])
+# parâmetros
+t0, y0, dy0 = 0, 1, 0   # condições iniciais
+h = 0.1                 # passo
+n_steps = 100           # número de passos
 
-# Parâmetros
-t0 = 0.0
-y0 = np.array([1.0, 0.0])
-h = 0.02
-n_steps = 800
-t_final = t0 + n_steps * h
+# solução numérica
+t, y_num, dy_num = euler_explicit_2nd(f, t0, y0, dy0, h, n_steps)
 
-#  Cálculo usando a SUA função euler_explicit ---
-t_custom, Y_custom = euler_explicit(f_system, t0=t0, y0=y0, h=h, n_steps=n_steps)
-y1_custom = Y_custom[:, 0]
-y2_custom = Y_custom[:, 1]
+# ======================
+# Solução exata simbólica com sympy
+# ======================
+t_sym = sp.symbols('t')
+y = sp.Function('y')
 
-# --- Solução exata ---
-y1_exact = np.cos(omega * t_custom)
+# Define EDO: y'' + 0.5 y' + y = cos(2t)
+ode = sp.Eq(sp.diff(y(t_sym), t_sym, 2) + 0.5*sp.diff(y(t_sym), t_sym) + y(t_sym),
+             sp.cos(2*t_sym))
 
-# --- Print comparando com a solução exata ---
-print("\n=== Comparação no ponto final: Euler explícito vs. Solução exata ===")
-print(f"{'Componente':<12} | {'Euler':>12} | {'Exato':>12}")
-print("-"*40)
-print(f"{'y1(t_f)':<12} | {y1_custom[-1]:>12.6f} | {y1_exact[-1]:>12.6f}")
-print(f"{'y2(t_f)':<12} | {y2_custom[-1]:>12.6f} | {(-np.sin(omega*t_custom[-1])):>12.6f}")
-print("="*40)
+# Resolve com as condições iniciais
+sol = sp.dsolve(ode, ics={y(0): y0, sp.diff(y(t_sym), t_sym).subs(t_sym, 0): dy0})
 
-# --- Gráfico ---
-plt.figure(figsize=(12, 7))
-plt.plot(t_custom, y1_custom, 'r-', label="y1 (Euler explícito)", linewidth=2)
-plt.plot(t_custom, y1_exact, 'k--', label="y1 (Exato)", linewidth=2)
-plt.xlabel("Tempo (t)")
-plt.ylabel("y1(t)")
-plt.title("Comparação Euler Explícito vs Solução Exata")
+# Transforma em função numérica para avaliação
+y_exact_func = sp.lambdify(t_sym, sol.rhs, 'numpy')
+y_exact = y_exact_func(t)
+
+# ======================
+# Gráfico comparação
+# ======================
+plt.figure(figsize=(10,5))
+plt.plot(t, y_exact, label="Solução exata (sympy)")
+plt.plot(t, y_num, linestyle="--", label="Euler explícito (2ª ordem)")
+plt.xlabel("t")
+plt.ylabel("y(t)")
+plt.title("PVI: y'' + 0.5y' + y = cos(2t)")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+# ======================
+# Gráfico do erro absoluto
+# ======================
+plt.figure(figsize=(10,5))
+plt.plot(t, np.abs(y_num - y_exact), label="Erro absoluto")
+plt.xlabel("t")
+plt.ylabel("|y_num - y_exato|")
+plt.title("Erro absoluto ao longo do tempo (Euler explícito)")
 plt.legend()
 plt.grid(True)
 plt.show()

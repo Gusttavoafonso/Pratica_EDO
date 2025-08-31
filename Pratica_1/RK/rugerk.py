@@ -1,6 +1,6 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from math import exp
+
+
 
 def rk4(f, t0, y0, h, n_steps):
 
